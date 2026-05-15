@@ -26,7 +26,8 @@ except Exception as e:
     st.error("❌ Connection failed with the following raw error:")
     st.code(str(e))
 
-return if True
+if True:
+    return
 
 #test END
 
