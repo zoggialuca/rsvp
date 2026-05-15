@@ -13,6 +13,8 @@ except Exception as e:
     st.error("Please configure Google Sheets Secrets in Streamlit Cloud.")
     st.stop()
 
+st.dataframe(df)
+
 # Get the 'code' from the URL query parameters
 user_code = st.query_params.get("code")
 
