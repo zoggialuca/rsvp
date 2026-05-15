@@ -7,19 +7,11 @@ st.set_page_config(page_title="Event RSVP", page_icon="🎉")
 # Setup connection to Google Sheets
 try:
     conn = st.connection("gsheets", type=GSheetsConnection)
-    df = conn.read(usecols=[0, 1, 2, 3, 4])
+    df = conn.read(usecols=list(range(5)))
 except Exception as e:
     st.error(e)
     st.error("Please configure Google Sheets Secrets in Streamlit Cloud.")
     st.stop()
-
-###test begin
-
-st.dataframe(df)
-
-##test end
-
-"""
 
 # Get the 'code' from the URL query parameters
 user_code = st.query_params.get("code")
@@ -69,5 +61,3 @@ else:
             conn.update(data=df)
             st.success("Responses updated! Thank you.")
             st.balloons()
-
-"""
