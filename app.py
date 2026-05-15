@@ -16,6 +16,8 @@ except Exception as e:
 # Get the 'code' from the URL query parameters
 user_code = st.query_params.get("code")
 
+st.write(user_code)
+
 if not user_code:
     st.title("📅 Event Invitation")
     st.info("Please use your personal link to RSVP.")
