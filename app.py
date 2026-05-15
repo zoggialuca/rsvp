@@ -15,7 +15,7 @@ except Exception as e:
 
 ###test begin
 
-for _, member in df:
+for _, member in df.iterrows():
     st.write(f"**{member['guest_code']}: **{member['name']}")
 
 ##test end
