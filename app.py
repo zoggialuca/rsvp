@@ -9,6 +9,7 @@ try:
     conn = st.connection("gsheets", type=GSheetsConnection)
     df = conn.read()
 except Exception as e:
+    st.error(e)
     st.error("Please configure Google Sheets Secrets in Streamlit Cloud.")
     st.stop()
 
