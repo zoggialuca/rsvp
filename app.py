@@ -13,10 +13,15 @@ except Exception as e:
     st.error("Please configure Google Sheets Secrets in Streamlit Cloud.")
     st.stop()
 
+###test begin
+
+for _, member in df:
+    st.write(f"**{member['guest_code']}: **{member['name']}")
+
+##test end
+
 # Get the 'code' from the URL query parameters
 user_code = st.query_params.get("code")
-
-st.write(user_code)
 
 if not user_code:
     st.title("📅 Event Invitation")
