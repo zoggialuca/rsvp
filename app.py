@@ -20,6 +20,8 @@ for _, member in df.iterrows():
 
 ##test end
 
+"""
+
 # Get the 'code' from the URL query parameters
 user_code = st.query_params.get("code")
 
@@ -68,3 +70,5 @@ else:
             conn.update(data=df)
             st.success("Responses updated! Thank you.")
             st.balloons()
+
+"""
