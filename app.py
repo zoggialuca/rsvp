@@ -2,34 +2,6 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 
-#test BEGIN
-
-import gspread
-
-st.title("Google Sheets Raw Connection Test")
-
-try:
-    # This reads the exact JSON structure from your secrets
-    credentials = dict(st.secrets["connections"]["gsheets"])
-    
-    # Attempt a raw login using gspread (the underlying library)
-    gc = gspread.service_account_from_dict(credentials)
-    
-    # Try to open the sheet
-    sh = gc.open_by_url(credentials["spreadsheet"])
-    worksheet = sh.get_worksheet(0)
-    
-    st.success("🎉 Success! Connected directly to Google Sheets.")
-    st.write("First row of data:", worksheet.row_values(1))
-
-except Exception as e:
-    st.error("❌ Connection failed with the following raw error:")
-    st.code(str(e))
-
-#test END
-
-"""
-
 st.set_page_config(page_title="Event RSVP", page_icon="🎉")
 
 # Setup connection to Google Sheets
@@ -89,5 +61,3 @@ else:
             conn.update(data=df)
             st.success("Responses updated! Thank you.")
             st.balloons()
-
-"""
