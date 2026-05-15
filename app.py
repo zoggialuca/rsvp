@@ -7,7 +7,20 @@ st.set_page_config(page_title="Event RSVP", page_icon="🎉")
 # Setup connection to Google Sheets
 try:
     conn = st.connection("gsheets", type=GSheetsConnection)
+    # 1. Read the raw data
     df = conn.read(usecols=list(range(5)))
+    
+    # 2. Force the column types explicitly
+    df = df.astype({
+        'guest_code': str,        # Keeps codes like '00123' or 'A1B2' as pure text
+        'name': str,              # Explicit string
+        'group_id': str,          # CRITICAL: Treats IDs as text so '101' doesn't become '101.0'
+        'attending': str,         # Text status ('Yes', 'No', 'Pending')
+        'food_preference': str    # Text answers
+    })
+    
+    # 3. Clean up missing/empty values (NaN) so they don't break your text boxes
+    df = df.fillna("")
 except Exception as e:
     st.error(e)
     st.error("Please configure Google Sheets Secrets in Streamlit Cloud.")
