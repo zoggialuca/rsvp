@@ -1,76 +1,84 @@
-import streamlit as st
-from streamlit_gsheets import GSheetsConnection
-import pandas as pd
-
 st.set_page_config(page_title="Event RSVP", page_icon="🎉")
 
 # Setup connection to Google Sheets
 try:
     conn = st.connection("gsheets", type=GSheetsConnection)
-    # 1. Read the raw data
-    df = conn.read(usecols=list(range(5)))
-    
-    # 2. Force the column types explicitly
-    df = df.astype({
-        'guest_code': str,        # Keeps codes like '00123' or 'A1B2' as pure text
-        'name': str,              # Explicit string
-        'group_id': str,          # CRITICAL: Treats IDs as text so '101' doesn't become '101.0'
-        'attending': str,         # Text status ('Yes', 'No', 'Pending')
-        'food_preference': str    # Text answers
-    })
-    
-    # 3. Clean up missing/empty values (NaN) so they don't break your text boxes
-    df = df.fillna("")
+    df = conn.read()
 except Exception as e:
-    st.error(e)
     st.error("Please configure Google Sheets Secrets in Streamlit Cloud.")
     st.stop()
 
-# Get the 'code' from the URL query parameters
-user_code = st.query_params.get("code")
+# Force column types right away and clean up empty cells
+df = df.astype({
+    'name': str,
+    'group_id': str,
+    'attending': str,
+    'food_preference': str
+})
+df = df.fillna("")
 
-if not user_code:
+# Get the 'group' from the URL query parameters (e.g., ?group=101)
+url_group_id = st.query_params.get("group")
+
+if not url_group_id:
     st.title("📅 Event Invitation")
-    st.info("Please use your personal link to RSVP.")
+    st.info("Please use your group's personal link to RSVP.")
     st.stop()
 
-# Find the guest and their group
-current_user = df[df['guest_code'] == user_code]
+# Find all members belonging to this group ID
+group_members = df[df['group_id'] == url_group_id]
 
-if current_user.empty:
-    st.error("Invalid invitation code. Please check your link.")
+if group_members.empty:
+    st.error("Invalid group invitation link. Please verify your link.")
 else:
-    group_id = current_user.iloc[0]['group_id']
-    group_members = df[df['group_id'] == group_id]
+    # Use the first member's name to personalize the welcome message
+    primary_guest = group_members.iloc[0]['name']
     
     st.title("🎉 Welcome!")
-    st.write(f"RSVP for **{current_user.iloc[0]['name']}** and linked friends.")
+    st.write(f"Managing RSVP for **{primary_guest}**'s group.")
 
     with st.form("rsvp_form"):
         form_data = []
-        for _, member in group_members.iterrows():
+        
+        for idx, member in group_members.iterrows():
             st.subheader(f"Guest: {member['name']}")
             
-            # Attending Radio
-            current_status = str(member.get('attending', 'Pending'))
+            # Attending Radio Setup
+            current_status = member['attending'].strip()
             opts = ["Yes", "No", "Pending"]
-            idx = opts.index(current_status) if current_status in opts else 2
+            # Default to 'Pending' if the current status isn't Yes or No
+            default_idx = opts.index(current_status) if current_status in opts else 2
             
-            status = st.radio(f"Attending?", opts, index=idx, key=f"s_{member['guest_code']}", horizontal=True)
+            status = st.radio(
+                f"Will {member['name']} be attending?", 
+                opts, 
+                index=default_idx, 
+                key=f"s_{idx}", # Using row index as a unique key
+                horizontal=True
+            )
             
             # Answer Question
-            food = st.text_input("Dietary needs / Special requests?", 
-                                 value=member.get('food_preference', '') if pd.notnull(member.get('food_preference')) else '',
-                                 key=f"f_{member['guest_code']}")
+            food = st.text_input(
+                "Dietary needs / Special requests?", 
+                value=member['food_preference'],
+                key=f"f_{idx}"
+            )
             
-            form_data.append({"guest_code": member['guest_code'], "attending": status, "food_preference": food})
+            # Keep track of the row index so we can update the correct row later
+            form_data.append({
+                "row_index": idx, 
+                "attending": status, 
+                "food_preference": food
+            })
             st.divider()
 
-        if st.form_submit_button("Submit All RSVPs"):
+        if st.form_submit_button("Submit Group RSVP"):
+            # Update the dataframe using the tracked row indexes
             for entry in form_data:
-                df.loc[df['guest_code'] == entry['guest_code'], 'attending'] = entry['attending']
-                df.loc[df['guest_code'] == entry['guest_code'], 'food_preference'] = entry['food_preference']
+                df.loc[entry['row_index'], 'attending'] = entry['attending']
+                df.loc[entry['row_index'], 'food_preference'] = entry['food_preference']
             
+            # Save back to Google Sheets
             conn.update(data=df)
-            st.success("Responses updated! Thank you.")
+            st.success("Group responses updated successfully! Thank you.")
             st.balloons()
