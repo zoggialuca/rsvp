@@ -1,3 +1,7 @@
+import streamlit as st
+from streamlit_gsheets import GSheetsConnection
+import pandas as pd
+
 st.set_page_config(page_title="Event RSVP", page_icon="🎉")
 
 # Setup connection to Google Sheets
