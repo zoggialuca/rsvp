@@ -38,7 +38,7 @@ else:
     # Use the first member's name to personalize the welcome message
     primary_guest = group_members.iloc[0]['name']
     
-    st.title("Luca and Ben invite you to their wedding party!")
+    st.title("Luca and Ben wedding party!")
     st.write("*When:* 10 Apr 2027 18:00")
     st.write("*Where:* [Ristorante Ai Sette Nani](https://maps.app.goo.gl/M5T9kSUeiPYRqAay6) Via Grave di Sopra, 37/a, 31045 Ponte di Piave TV, Italy")
 
@@ -77,7 +77,7 @@ else:
             })
             st.divider()
 
-        if st.form_submit_button("Submit Group RSVP"):
+        if st.form_submit_button("Submit"):
             # Update the dataframe using the tracked row indexes
             for entry in form_data:
                 df.loc[entry['row_index'], 'attending'] = entry['attending']
