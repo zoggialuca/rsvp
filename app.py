@@ -85,5 +85,5 @@ else:
             
             # Save back to Google Sheets
             conn.update(data=df)
-            st.success("Group responses updated successfully! Thank you.")
+            st.success("Responses updated successfully! Thank you.")
             st.balloons()
