@@ -36,23 +36,23 @@ group_members = df[df['group_id_base64'] == url_group_id]
 if group_members.empty:
     st.error("Invalid group invitation link. Please verify your link.")
 else:
-    st.title("Luca and Ben wedding party!")
-    st.write("_When:_ **Sat 10 Apr 2027 18:00**")
-    st.write("_Where:_ [**Ristorante Ai Sette Nani**](https://maps.app.goo.gl/M5T9kSUeiPYRqAay6) Via Grave di Sopra, 37/a, 31045 Ponte di Piave TV, Italy")
+    st.title("Luca and Ben's wedding!")
+    st.write("**Sat 10 Apr 2027 18:00**")
+    st.write("[**Ristorante Ai Sette Nani**](https://maps.app.goo.gl/M5T9kSUeiPYRqAay6) Via Grave di Sopra, 37/a, 31045 Ponte di Piave TV, Italy")
 
     with st.form("rsvp_form"):
         form_data = []
         
         for idx, member in group_members.iterrows():
-            st.subheader(f"Guest: {member['name']}")
+            st.subheader(f"{member['name']}")
             
             # Attending Radio Setup
             current_status = member['attending'].strip()
-            opts = ["Yes", "No", "Pending"]
+            opts = ["Yes", "No", "Pending (In attesa di conferma)"]
             default_idx = opts.index(current_status) if current_status in opts else 2
             
             status = st.radio(
-                f"Will {member['name']} be attending?", 
+                f"Will {member['name']} be attending? ({member['name']} ci sarà)", 
                 opts, 
                 index=default_idx, 
                 key=f"s_{idx}",
@@ -60,7 +60,7 @@ else:
             )
             
             food = st.text_input(
-                "Dietary needs / Special requests?", 
+                "Dietary needs / Special requests? (Esigenze per il cibo / Richieste particolari)", 
                 value=member['food_preference'],
                 key=f"f_{idx}"
             )
@@ -90,5 +90,5 @@ else:
             
             # 3. Overwrite with the fresh, safely modified dataframe
             conn.update(data=fresh_df)
-            st.success("Responses updated successfully! Thank you.")
+            st.success("Thank you.")
             st.balloons()
