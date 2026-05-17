@@ -16,6 +16,7 @@ except Exception as e:
 df = df.astype({
     'name': str,
     'group_id': str,
+    'group_id_base64': str,
     'attending': str,
     'food_preference': str
 })
@@ -30,7 +31,7 @@ if not url_group_id:
     st.stop()
 
 # Find all members belonging to this group ID
-group_members = df[df['group_id'] == url_group_id]
+group_members = df[df['group_id_base64'] == url_group_id]
 
 if group_members.empty:
     st.error("Invalid group invitation link. Please verify your link.")
