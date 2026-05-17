@@ -38,8 +38,9 @@ else:
     # Use the first member's name to personalize the welcome message
     primary_guest = group_members.iloc[0]['name']
     
-    st.title("🎉 Welcome!")
-    st.write(f"Managing RSVP for **{primary_guest}**'s group.")
+    st.title("Luca and Ben invite you to their wedding party!")
+    st.write("*When:* 10 Apr 2027 18:00")
+    st.write("*Where:* Ristorante Ai Sette Nani\nVia Grave di Sopra, 37/a, 31045 Ponte di Piave TV, Italy\nhttps://maps.app.goo.gl/M5T9kSUeiPYRqAay6")
 
     with st.form("rsvp_form"):
         form_data = []
