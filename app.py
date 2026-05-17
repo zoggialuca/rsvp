@@ -39,8 +39,8 @@ else:
     primary_guest = group_members.iloc[0]['name']
     
     st.title("Luca and Ben wedding party!")
-    st.write("*When:* 10 Apr 2027 18:00")
-    st.write("*Where:* [Ristorante Ai Sette Nani](https://maps.app.goo.gl/M5T9kSUeiPYRqAay6) Via Grave di Sopra, 37/a, 31045 Ponte di Piave TV, Italy")
+    st.write("*When:* _Sat 10 Apr 2027 18:00_")
+    st.write("*Where:* [_Ristorante Ai Sette Nani_](https://maps.app.goo.gl/M5T9kSUeiPYRqAay6) Via Grave di Sopra, 37/a, 31045 Ponte di Piave TV, Italy")
 
     with st.form("rsvp_form"):
         form_data = []
