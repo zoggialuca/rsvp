@@ -40,7 +40,7 @@ else:
     
     st.title("Luca and Ben invite you to their wedding party!")
     st.write("*When:* 10 Apr 2027 18:00")
-    st.write("*Where:* Ristorante Ai Sette Nani\n\nVia Grave di Sopra, 37/a, 31045 Ponte di Piave TV, Italy\nh\nttps://maps.app.goo.gl/M5T9kSUeiPYRqAay6")
+    st.write("*Where:* [Ristorante Ai Sette Nani\n\nVia Grave di Sopra, 37/a, 31045 Ponte di Piave TV, Italy](https://maps.app.goo.gl/M5T9kSUeiPYRqAay6)")
 
     with st.form("rsvp_form"):
         form_data = []
