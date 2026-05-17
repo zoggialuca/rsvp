@@ -52,7 +52,7 @@ else:
             default_idx = opts.index(current_status) if current_status in opts else 2
             
             status = st.radio(
-                f"Will {member['name']} be attending? ({member['name']} ci sarà)", 
+                f"Will {member['name']} be attending? ({member['name']} ci sarà?)", 
                 opts, 
                 index=default_idx, 
                 key=f"s_{idx}",
